@@ -5014,7 +5014,12 @@ function ExportPage() {
                       {sessionLoadDetailRows.map((row) => (
                         <div className="session-load-detail-row" key={`message-${row.tab}`}>
                           <span>{row.label}</span>
-                          <span>{row.messageCount.statusLabel}</span>
+                          <span className="session-load-detail-status-cell">
+                            <span>{row.messageCount.statusLabel}</span>
+                            {row.messageCount.statusLabel.startsWith('加载中') && (
+                              <Loader2 size={12} className="spin session-load-detail-status-icon" aria-label="加载中" />
+                            )}
+                          </span>
                           <span>{formatLoadDetailTime(row.messageCount.startedAt)}</span>
                           <span>{formatLoadDetailTime(row.messageCount.finishedAt)}</span>
                         </div>
@@ -5034,7 +5039,12 @@ function ExportPage() {
                       {sessionLoadDetailRows.map((row) => (
                         <div className="session-load-detail-row" key={`media-${row.tab}`}>
                           <span>{row.label}</span>
-                          <span>{row.mediaMetrics.statusLabel}</span>
+                          <span className="session-load-detail-status-cell">
+                            <span>{row.mediaMetrics.statusLabel}</span>
+                            {row.mediaMetrics.statusLabel.startsWith('加载中') && (
+                              <Loader2 size={12} className="spin session-load-detail-status-icon" aria-label="加载中" />
+                            )}
+                          </span>
                           <span>{formatLoadDetailTime(row.mediaMetrics.startedAt)}</span>
                           <span>{formatLoadDetailTime(row.mediaMetrics.finishedAt)}</span>
                         </div>
