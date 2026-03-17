@@ -30,6 +30,16 @@ const tabs: { id: SettingsTab; label: string; icon: React.ElementType }[] = [
   { id: 'about', label: '关于', icon: Info }
 ]
 
+const isMac = navigator.userAgent.toLowerCase().includes('mac')
+const isLinux = navigator.userAgent.toLowerCase().includes('linux')
+
+const dbDirName = isMac ? '2.0b4.0.9 目录' : 'xwechat_files 目录'
+const dbPathPlaceholder = isMac
+    ? '例如: ~/Library/Containers/com.tencent.xinWeChat/Data/Library/Application Support/com.tencent.xinWeChat/2.0b4.0.9'
+    : isLinux
+        ? '例如: ~/.local/share/WeChat/xwechat_files 或者 ~/Documents/xwechat_files'
+        : '例如: C:\\Users\\xxx\\Documents\\xwechat_files'
+
 
 interface WxidOption {
   wxid: string
@@ -1371,7 +1381,7 @@ function SettingsPage({ onClose }: SettingsPageProps = {}) {
         <span className="form-hint">xwechat_files 目录</span>
         <input
           type="text"
-          placeholder="例如: C:\Users\xxx\Documents\xwechat_files"
+          placeholder={dbPathPlaceholder}
           value={dbPath}
           onChange={(e) => {
             const value = e.target.value

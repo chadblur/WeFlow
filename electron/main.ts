@@ -17,6 +17,7 @@ import { annualReportService } from './services/annualReportService'
 import { exportService, ExportOptions, ExportProgress } from './services/exportService'
 import { KeyService } from './services/keyService'
 import { KeyServiceMac } from './services/keyServiceMac'
+import { KeyServiceLinux } from './services/keyServiceLinux';
 import { voiceTranscribeService } from './services/voiceTranscribeService'
 import { videoService } from './services/videoService'
 import { snsService, isVideoUrl } from './services/snsService'
@@ -89,9 +90,15 @@ let onboardingWindow: BrowserWindow | null = null
 let splashWindow: BrowserWindow | null = null
 const sessionChatWindows = new Map<string, BrowserWindow>()
 const sessionChatWindowSources = new Map<string, 'chat' | 'export'>()
-const keyService = process.platform === 'darwin' 
-  ? new KeyServiceMac() as any 
-  : new KeyService()
+
+let keyService: KeyService | KeyServiceMac | KeyServiceLinux;
+if (process.platform === 'darwin') {
+  keyService = new KeyServiceMac();
+} else if (process.platform === 'linux') {
+  keyService = new KeyServiceLinux();
+} else {
+  keyService = new KeyService();
+}
 
 let mainWindowReady = false
 let shouldShowMain = true

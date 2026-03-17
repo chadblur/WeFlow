@@ -16,7 +16,7 @@ interface ConfigSchema {
   imageXorKey: number
   imageAesKey: string
   wxidConfigs: Record<string, { decryptKey?: string; imageXorKey?: number; imageAesKey?: string; updatedAt?: number }>
-
+  exportPath?: string;
   // 缓存相关
   cachePath: string
   lastOpenedDb: string
