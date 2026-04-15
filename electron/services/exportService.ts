@@ -442,8 +442,8 @@ class ExportService {
     let lastSessionId = ''
     let lastCollected = 0
     let lastExported = 0
-    const MIN_PROGRESS_EMIT_INTERVAL_MS = 250
-    const MESSAGE_PROGRESS_DELTA_THRESHOLD = 500
+    const MIN_PROGRESS_EMIT_INTERVAL_MS = 400
+    const MESSAGE_PROGRESS_DELTA_THRESHOLD = 1200
 
     const commit = (progress: ExportProgress) => {
       onProgress(progress)
@@ -3682,18 +3682,28 @@ class ExportService {
         createTime: msg.createTime,
         force: true,  // 导出优先高清，失败再回退缩略图
         preferFilePath: true,
-        hardlinkOnly: true
+        hardlinkOnly: true,
+        disableUpdateCheck: true,
+        allowCacheIndex: !imageMd5,
+        suppressEvents: true
       })
 
       if (!result.success || !result.localPath) {
-        console.log(`[Export] 图片解密失败 (localId=${msg.localId}): imageMd5=${imageMd5}, imageDatName=${imageDatName}, error=${result.error || '未知'}`)
+        if (result.failureKind === 'decrypt_failed') {
+          console.log(`[Export] 图片解密失败 (localId=${msg.localId}): imageMd5=${imageMd5}, imageDatName=${imageDatName}, error=${result.error || '未知'}`)
+        } else {
+          console.log(`[Export] 图片本地无数据 (localId=${msg.localId}): imageMd5=${imageMd5}, imageDatName=${imageDatName}, error=${result.error || '未知'}`)
+        }
         // 尝试获取缩略图
         const thumbResult = await imageDecryptService.resolveCachedImage({
           sessionId,
           imageMd5,
           imageDatName,
           createTime: msg.createTime,
-          preferFilePath: true
+          preferFilePath: true,
+          disableUpdateCheck: true,
+          allowCacheIndex: !imageMd5,
+          suppressEvents: true
         })
         if (thumbResult.success && thumbResult.localPath) {
           console.log(`[Export] 使用缩略图替代 (localId=${msg.localId}): ${thumbResult.localPath}`)

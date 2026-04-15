@@ -79,7 +79,8 @@ export class ImagePreloadService {
         preferFilePath: true,
         hardlinkOnly: true,
         disableUpdateCheck: !task.allowDecrypt,
-        allowCacheIndex: task.allowCacheIndex
+        allowCacheIndex: task.allowCacheIndex,
+        suppressEvents: true
       })
       if (cached.success) return
       if (!task.allowDecrypt) return
@@ -89,7 +90,9 @@ export class ImagePreloadService {
         imageDatName: task.imageDatName,
         createTime: task.createTime,
         preferFilePath: true,
-        hardlinkOnly: true
+        hardlinkOnly: true,
+        disableUpdateCheck: true,
+        suppressEvents: true
       })
     } catch {
       // ignore preload failures

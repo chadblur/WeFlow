@@ -1257,7 +1257,9 @@ class HttpService {
           createTime: msg.createTime,
           force: true,
           preferFilePath: true,
-          hardlinkOnly: true
+          hardlinkOnly: true,
+          disableUpdateCheck: true,
+          suppressEvents: true
         })
 
         let imagePath = result.success ? result.localPath : undefined
@@ -1269,7 +1271,9 @@ class HttpService {
               imageDatName: msg.imageDatName,
               createTime: msg.createTime,
               preferFilePath: true,
-              hardlinkOnly: true
+              hardlinkOnly: true,
+              disableUpdateCheck: true,
+              suppressEvents: true
             })
             if (cached.success && cached.localPath) {
               imagePath = cached.localPath

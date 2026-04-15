@@ -689,11 +689,17 @@ const normalizeAutomationTask = (raw: unknown): ExportAutomationTask | null => {
   if (scheduleType === 'interval') {
     const rawDays = Math.max(0, normalizeAutomationNumeric(scheduleObj.intervalDays, 0))
     const rawHours = Math.max(0, normalizeAutomationNumeric(scheduleObj.intervalHours, 0))
+    const rawFirstTriggerAt = Math.max(0, normalizeAutomationNumeric(scheduleObj.firstTriggerAt, 0))
     const totalHours = (rawDays * 24) + rawHours
     if (totalHours <= 0) return null
     const intervalDays = Math.floor(totalHours / 24)
     const intervalHours = totalHours % 24
-    schedule = { type: 'interval', intervalDays, intervalHours }
+    schedule = {
+      type: 'interval',
+      intervalDays,
+      intervalHours,
+      firstTriggerAt: rawFirstTriggerAt > 0 ? rawFirstTriggerAt : undefined
+    }
   }
   if (!schedule) return null
 
